@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.panorama"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -56,8 +56,14 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
     compile project(':opencv-java')
+
     implementation 'com.android.support:design:27.1.0'
     compile 'com.android.support:support-v4:27.1.0'
     compile 'com.android.support:recyclerview-v7:27.1.0'
+    compile 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-7'
+    compile 'com.google.vr:sdk-panowidget:1.130.0'
+    compile 'com.google.vr:sdk-common:1.130.0'
+    compile 'com.google.vr:sdk-commonwidget:1.130.0'
 }

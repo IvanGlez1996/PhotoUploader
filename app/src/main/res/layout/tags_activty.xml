@@ -6,12 +6,10 @@
                 android:layout_height="match_parent"
                 android:background="#ffffff">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.google.vr.sdk.widgets.pano.VrPanoramaView
+        android:id="@+id/pano_view"
         android:layout_width="match_parent"
-        android:layout_height="203dp"
-        app:srcCompat="@drawable/abc_btn_check_to_on_mtrl_000"
-        android:contentDescription="TODO"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
