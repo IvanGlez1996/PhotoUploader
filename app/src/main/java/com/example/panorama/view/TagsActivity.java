@@ -26,14 +26,13 @@ import java.util.ArrayList;
  * Created by IvanGlez on 14/03/2018.
  */
 
-public class TagsActivity extends AppCompatActivity implements ITagsActivity {
+public class TagsActivity extends AppCompatActivity implements ITagsActivity  {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<String> datos;
     private FloatingActionButton addTagBtn;
-//    private ImageView imagePreview;
     private VrPanoramaView mVrPanoramaView;
 
     @Override
@@ -52,22 +51,10 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
             }
         });
 
+
         mVrPanoramaView = (VrPanoramaView) findViewById(R.id.pano_view);
 
         loadPhotoSphere();
-
-        /*imagePreview = (ImageView) findViewById(R.id.imageView);
-        Intent i = getIntent();
-        String fileName = i.getStringExtra("fileName");
-        File imgFile = new  File(fileName);
-
-        if(imgFile.exists()){
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-            imagePreview.setImageBitmap(myBitmap);
-
-        }*/
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -80,6 +67,9 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
         // specify an adapter (see also next example)
         mAdapter = new Adapter(datos);
         mRecyclerView.setAdapter(mAdapter);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.plus_white_symbol);
     }
 
     public void showAddTagAlert() {
@@ -143,6 +133,7 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
         mVrPanoramaView.shutdown();
         super.onDestroy();
     }
+
 }
 
 
