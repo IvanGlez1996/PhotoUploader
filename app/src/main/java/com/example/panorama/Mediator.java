@@ -12,6 +12,7 @@ import com.example.panorama.presenter.IPresenter;
 import com.example.panorama.presenter.Presenter;
 import com.example.panorama.view.IMainActivity;
 import com.example.panorama.view.ITagsActivity;
+import com.example.panorama.view.TagsActivity;
 
 /**
  * Created by IvanGlez on 12/03/2018.
@@ -66,6 +67,10 @@ public class Mediator extends Application {
 
     public void setMainView(IMainActivity mainView) {
         this.mainView = mainView;
+    }
+
+    public void setTagsActivity(ITagsActivity tagsActivity) {
+        this.tagsActivity = tagsActivity;
     }
 
     // Métodos destinados a la navegación en la aplicación y a la definición de servicios

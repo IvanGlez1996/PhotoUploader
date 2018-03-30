@@ -5,4 +5,6 @@ package com.example.panorama.view;
  */
 
 public interface ITagsActivity {
+
+    void addNewTag(String tag);
 }

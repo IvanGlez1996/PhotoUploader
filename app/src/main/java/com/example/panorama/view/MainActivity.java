@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     private boolean isPreview; // Is the camera frame displaying?
     private boolean safeToTakePicture = true; // Is it safe to capture a picture?
     private LinearLayout linearLayout; // used to place the two buttons
+    private Mediator mediator;
 
     private List<Mat> listImage = new ArrayList<>();
 
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mediator = (Mediator) this.getApplication();
+        mediator.setMainView(this);
 
         isPreview = false;
         mSurfaceView = (SurfaceView)findViewById(R.id.surfaceView);

@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "com.example.panorama"
-        minSdkVersion 19
-        targetSdkVersion 27
+        minSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
 
@@ -66,5 +67,6 @@ dependencies {
     compile 'com.google.vr:sdk-panowidget:1.130.0'
     compile 'com.google.vr:sdk-common:1.130.0'
     compile 'com.google.vr:sdk-commonwidget:1.130.0'
-    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services:12.0.0'
+    compile 'com.google.android.gms:play-services-location:12.0.0'
 }
