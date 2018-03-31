@@ -222,6 +222,7 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
 
     public void addNewTag(String tag) {
         datos.add(tag);
+        sensorTags.add(tag);
         mAdapter.notifyDataSetChanged();
     }
 

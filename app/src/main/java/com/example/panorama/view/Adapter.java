@@ -4,6 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.panorama.R;
 
@@ -16,18 +20,41 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private ArrayList<String> mDataset;
+    private AdapterView.OnItemClickListener mItemClickListener;
+
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView mTextView;
-        public ViewHolder(TextView v) {
+        private ImageView deleteIcon;
+
+
+        public ViewHolder(View v) {
             super(v);
-            mTextView = v;
+            mTextView = (TextView) v.findViewById(R.id.tag_item);
+            deleteIcon = (ImageView) v.findViewById(R.id.crossButton);
+
+            deleteIcon.setOnClickListener(this);
+            v.setOnClickListener(this);
         }
+
+
+        @Override
+        public void onClick(View v) {
+            //Log.d("View: ", v.toString());
+            //Toast.makeText(v.getContext(), mTextViewTitle.getText() + " position = " + getPosition(), Toast.LENGTH_SHORT).show();
+            if (v.equals(deleteIcon)) {
+                removeAt(getAdapterPosition());
+            }
+        }
+
+
     }
+
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public Adapter(ArrayList<String> myDataset) {
@@ -42,7 +69,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_tag_item, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder((TextView) v);
+        ViewHolder vh = new ViewHolder((RelativeLayout) v);
         return vh;
     }
 
@@ -60,5 +87,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public int getItemCount() {
         return mDataset.size();
     }
+
+    public void setOnItemClickListener(final AdapterView.OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public void removeAt(int position) {
+            mDataset.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mDataset.size());
+    }
 }
+
 
