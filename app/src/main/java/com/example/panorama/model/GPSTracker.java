@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.example.panorama.Mediator;
 import com.example.panorama.view.GPSSettingsDialog;
 import com.example.panorama.view.TagsActivity;
 
@@ -101,6 +102,14 @@ public class GPSTracker extends Service implements LocationListener {
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
+                            String urlServidor_Actual = "http://api.openweathermap.org/data/2.5/weather"+
+                                    "?lat=" + location.getLatitude() +
+                                    "&lon=" + location.getLongitude() +
+                                    "&units=" + Mediator.UNIDAD +
+                                    "&mode=json" +
+                                    "&appid=" + Mediator.CLAVE;
+
+                            new WeatherAPIConnection().execute(urlServidor_Actual);
                         }
                     }
                 }
@@ -118,6 +127,14 @@ public class GPSTracker extends Service implements LocationListener {
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
+                                String urlServidor_Actual = "http://api.openweathermap.org/data/2.5/weather"+
+                                        "?lat=" + location.getLatitude() +
+                                        "&lon=" + location.getLongitude() +
+                                        "&units=" + Mediator.UNIDAD +
+                                        "&mode=json" +
+                                        "&appid=" + Mediator.CLAVE;
+
+                                new WeatherAPIConnection().execute(urlServidor_Actual);
                             }
                         }
                     }

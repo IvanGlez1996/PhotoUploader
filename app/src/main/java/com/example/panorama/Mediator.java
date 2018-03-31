@@ -41,6 +41,12 @@ public class Mediator extends Application {
     public static final String AVISO_AGREGAR_MARCA = "pem.tema4.AVISO_AGREGAR_MARCA";
     public static final String AVISO_BORRAR_MARCA = "pem.tema4.AVISO_BORRAR_MARCA";
 
+    public static final String AVISO_NUEVA_INFORMACION = "pem.tema4.vista.AVISO_NUEVA_INFORMACION";
+
+    public static final String CLAVE_INFORMACION = "CLAVE_INFORMACION";
+
+    public static final String UNIDAD = "metric"; // los grados de la temperatura se miden en Celsius
+    public static final String CLAVE = "b7f61c141a936a171b60327be1c12fb5";  // clave de open weather (ésta es la mía)
 
     public static Mediator getInstance(){
         return singleton;

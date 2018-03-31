@@ -85,6 +85,8 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
         mediator = Mediator.getInstance();
         mediator.setTagsActivity(this);
 
+        mediator.getPresenter().getWeatherInfo();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.lista);
 
         datos = new ArrayList<>();
@@ -154,13 +156,13 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if(mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null){
+        /*if(mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null){
             mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         }
 
         if(mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) != null){
             mTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
-        }
+        }*/
 
         if(mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
             mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -270,7 +272,7 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
             }
             if (addresses != null && addresses.size() > 0) {
                 String locality = addresses.get(0).getLocality();
-                sensorTags.add("Ciudad: " + locality);
+                sensorTags.add("Lugar: " + locality);
             }
         }
 
@@ -296,8 +298,8 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
     protected void onResume() {
         super.onResume();
         mVrPanoramaView.resumeRendering();
-        mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
+        /*mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);*/
         mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -328,12 +330,18 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity, Se
         } else if (event.sensor.equals(mLight) && count3 == 1) {
             count3 = 0;
             float lx = event.values[0];
-            String lxStr = "Ambient Temperature: " + String.valueOf(lx) + "ºC";
+            String lxStr = "Light : " + String.valueOf(lx) + "lx";
             sensorTags.add(lxStr);
         }
 
         mSensorManager.unregisterListener(this);
 
+    }
+
+    public void setWeatherTags(ArrayList<String> data){
+        sensorTags.add("Ciudad: " + data.get(0));
+        sensorTags.add("Temperatura: " + data.get(1));
+        sensorTags.add("Concicion: " + data.get(4));
     }
 
 
