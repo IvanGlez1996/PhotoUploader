@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.panorama.Mediator;
+import com.example.panorama.model.CustomTag;
 import com.example.panorama.model.IModel;
 import com.example.panorama.model.Model;
 import com.example.panorama.model.PanoramicImage;
@@ -12,6 +13,7 @@ import com.example.panorama.view.PanoramaPreview;
 import com.example.panorama.view.TagsActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Presenter implements IPresenter {
@@ -46,6 +48,21 @@ public class Presenter implements IPresenter {
     @Override
     public PanoramicImage getImage(String path) {
         return modelo.getImage(path);
+    }
+
+    @Override
+    public void saveTagIntoDatabase(String id, String imagePath, String name) {
+        modelo.saveTagIntoDatabase(id, imagePath, name);
+    }
+
+    @Override
+    public void deleteTagFromDatabase(String id) {
+        modelo.deleteTagFromDatabase(id);
+    }
+
+    @Override
+    public List<CustomTag> getImageTagsFromDatabase(String imagePath) {
+        return modelo.getImageTagsFromDatabase(imagePath);
     }
 
 

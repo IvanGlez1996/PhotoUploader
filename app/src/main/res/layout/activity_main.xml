@@ -33,7 +33,7 @@
             />
         <Button
         android:id="@+id/save"
-        android:background="@mipmap/save_button"
+        android:background="@drawable/right_arrow"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentRight="true"

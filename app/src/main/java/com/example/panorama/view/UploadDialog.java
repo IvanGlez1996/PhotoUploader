@@ -3,6 +3,8 @@ package com.example.panorama.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -11,9 +13,11 @@ import android.widget.TextView;
 
 import com.example.panorama.Mediator;
 import com.example.panorama.R;
+import com.example.panorama.model.CustomTag;
 import com.example.panorama.model.PanoramicImage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IvanGlez on 01/04/2018.
@@ -26,6 +30,11 @@ public class UploadDialog extends Dialog implements
     public Dialog d;
     public Button upload, cancel;
     public TextView path, zone, latitude, longitude, date, weather, temperature, pressure, humidity, windSpeed, windDir, ilumination;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private Mediator mediator;
+    private PanoramicImage image;
 
     public UploadDialog(Activity a) {
         super(a);
@@ -38,6 +47,8 @@ public class UploadDialog extends Dialog implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_upload);
+
+        mediator = Mediator.getInstance();
 
         upload = (Button) findViewById(R.id.upload_btn);
         cancel = (Button) findViewById(R.id.cancel_btn);
@@ -56,13 +67,29 @@ public class UploadDialog extends Dialog implements
         windSpeed = findViewById(R.id.winSpeed);
         windDir = findViewById(R.id.winDir);
         ilumination = findViewById(R.id.ilumination);
+        mRecyclerView = (RecyclerView) findViewById(R.id.lista);
+
+
+        image = Mediator.getInstance().getTagsActivity().getImage();
 
         setTextViews();
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        List<CustomTag> customTags = mediator.getPresenter().getImageTagsFromDatabase(image.getPath());
+        mAdapter = new AdapterDialog(customTags);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 
     public void setTextViews(){
-        PanoramicImage image = Mediator.getInstance().getTagsActivity().getImage();
         path.setText(image.getPath().toString());
         zone.setText(image.getZone().toString());
         latitude.setText(image.getLatitude().toString());

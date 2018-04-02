@@ -60,16 +60,27 @@ public class DatabaseFacade {
         return image;
     }
 
-    public void addCustomTagToDatabase(String imagePath, String name){
+    public void addCustomTagToDatabase(String id, String imagePath, String name){
         realmDatabase.beginTransaction();
-        CustomTag customTag = realmDatabase.createObject(CustomTag.class, UUID.randomUUID().toString());
+        CustomTag customTag = realmDatabase.createObject(CustomTag.class, id);
         customTag.setImage(imagePath);
         customTag.setName(name);
 
+        realmDatabase.commitTransaction();
+
+
     }
 
-    public List<CustomTag> getImageCustomTagsromDatabase(String imageId){
-        return realmDatabase.where(CustomTag.class).equalTo("image", imageId).findAll();
+    public List<CustomTag> getImageCustomTagsFromDatabase(String imagePath){
+        List<CustomTag> result = realmDatabase.where(CustomTag.class).equalTo("imagePath", imagePath).findAll();
+        Log.d("CustomTagId", result.get(0).getCustomTagId());
+        return result;
+    }
+
+    public void deleteTagFromDatabase(final String tagId) {
+        realmDatabase.beginTransaction();
+        realmDatabase.where(CustomTag.class).equalTo("customTagId", tagId).findAll().deleteAllFromRealm();
+        realmDatabase.commitTransaction();
     }
 
 

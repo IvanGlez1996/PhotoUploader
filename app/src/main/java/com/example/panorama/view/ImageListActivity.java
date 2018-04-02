@@ -8,9 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 import com.example.panorama.Mediator;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Created by IvanGlez on 14/03/2018.
  */
 
-public class TagsActivity extends AppCompatActivity implements ITagsActivity {
+public class ImageListActivity extends AppCompatActivity implements ITagsActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -118,12 +118,12 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
         });
         alert.show();*/
 
-        AddTagDialog cdd = new AddTagDialog(TagsActivity.this);
+        AddTagDialog cdd = new AddTagDialog(ImageListActivity.this);
         cdd.show();
     }
 
     public void showUploadDialog(){
-        UploadDialog dialog = new UploadDialog(TagsActivity.this);
+        UploadDialog dialog = new UploadDialog(ImageListActivity.this);
         dialog.show();
     }
 
