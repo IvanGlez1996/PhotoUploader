@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.panorama.Mediator;
 import com.example.panorama.NativePanorama;
 import com.example.panorama.R;
+import com.example.panorama.model.GPSTracker;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     private boolean safeToTakePicture = true; // Is it safe to capture a picture?
     private LinearLayout linearLayout; // used to place the two buttons
     private Mediator mediator;
+    private GPSTracker gps;
+
 
     private List<Mat> listImage = new ArrayList<>();
 
@@ -76,6 +79,16 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
 
         saveBtn = (Button) findViewById(R.id.save);
         saveBtn.setOnClickListener(saveOnClickListener);
+
+        gps = new GPSTracker(MainActivity.this);
+
+        if(!gps.canGetLocation()){
+
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            showSettingsAlert();
+        }
     }
 
     View.OnClickListener captureOnClickListener = new View.OnClickListener() {
@@ -173,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                         Toast.makeText(getApplicationContext(), "File saved at: " + fileName, Toast.LENGTH_LONG).show();
                         Bundle extras = new Bundle();
                         extras.putString("fileName", fileName);
-                        Intent i = new Intent(MainActivity.this, TagsActivity.class);
+                        Intent i = new Intent(MainActivity.this, PanoramaPreview.class);
                         if (extras != null)
                             i.putExtras(extras);
                         MainActivity.this.startActivity(i);
@@ -319,5 +332,10 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSettingsAlert(){
+        GPSSettingsDialog cdd = new GPSSettingsDialog(MainActivity.this);
+        cdd.show();
     }
 }

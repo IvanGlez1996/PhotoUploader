@@ -8,11 +8,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.panorama.model.ModuleCustomTagsPanoramicImage;
 import com.example.panorama.presenter.IPresenter;
 import com.example.panorama.presenter.Presenter;
 import com.example.panorama.view.IMainActivity;
+import com.example.panorama.view.IPanoramaPreview;
 import com.example.panorama.view.ITagsActivity;
 import com.example.panorama.view.TagsActivity;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by IvanGlez on 12/03/2018.
@@ -25,6 +30,7 @@ public class Mediator extends Application {
     private IPresenter presenter;
     private IMainActivity mainView;
     private ITagsActivity tagsActivity;
+    private IPanoramaPreview panoramaPreview;
 
     // constantes de comunicación, almacenamiento y petición
     public static final int ZOOM = 12; //este valor debería ser una preferencia de la aplicación, pero como no tenemos...
@@ -77,6 +83,14 @@ public class Mediator extends Application {
 
     public void setTagsActivity(ITagsActivity tagsActivity) {
         this.tagsActivity = tagsActivity;
+    }
+
+    public IPanoramaPreview getPanoramaPreview() {
+        return panoramaPreview;
+    }
+
+    public void setPanoramaPreview(IPanoramaPreview panoramaPreview) {
+        this.panoramaPreview = panoramaPreview;
     }
 
     // Métodos destinados a la navegación en la aplicación y a la definición de servicios
@@ -133,5 +147,13 @@ public class Mediator extends Application {
         super.onCreate();
         presenter = null;
         singleton = this;
+        Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .name("panoramaimages.realm")
+                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(1)
+                .modules(new ModuleCustomTagsPanoramicImage())
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
     }
 }

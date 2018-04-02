@@ -15,12 +15,16 @@ public class CustomTag extends RealmObject{
     private String customTagId;
 
     private String name;
-    private String imageId;
+    private String imagePath;
 
     public CustomTag(String name, String image){
         this.customTagId = UUID.randomUUID().toString();
         this.name = name;
-        this.imageId = image;
+        this.imagePath = image;
+    }
+
+    public CustomTag(){
+
     }
 
     public String getCustomTagId() {
@@ -39,12 +43,12 @@ public class CustomTag extends RealmObject{
         this.name = name;
     }
 
-    public String getImageId() {
-        return imageId;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(String imageId) {
-        this.imageId = imageId;
+    public void setImage(String imagePath) {
+        this.imagePath = imagePath;
     }
 
 }

@@ -7,6 +7,8 @@ import android.content.Intent;
 import com.example.panorama.Mediator;
 import com.example.panorama.model.IModel;
 import com.example.panorama.model.Model;
+import com.example.panorama.model.PanoramicImage;
+import com.example.panorama.view.PanoramaPreview;
 import com.example.panorama.view.TagsActivity;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 public class Presenter implements IPresenter {
 
     private Mediator appMediador;
-    private TagsActivity tagsActivity;
+    private PanoramaPreview panoramaPreview;
     private IModel modelo;
 
 
@@ -25,7 +27,7 @@ public class Presenter implements IPresenter {
             if(intent.getAction().equals(Mediator.AVISO_NUEVA_INFORMACION)){
                 ArrayList<String> data = intent.getStringArrayListExtra(Mediator.CLAVE_INFORMACION);
                 if (data != null){
-                    tagsActivity.setWeatherTags(data);
+                    panoramaPreview.setWeatherTags(data);
                 }
             }
         }
@@ -36,11 +38,20 @@ public class Presenter implements IPresenter {
         appMediador.registerReceiver(receptorDeAvisos, Mediator.AVISO_NUEVA_INFORMACION);
     }
 
+    @Override
+    public void saveImageIntoDatabase(ArrayList<String> data){
+        modelo.saveImageIntoDatabase(data);
+    }
+
+    @Override
+    public PanoramicImage getImage(String path) {
+        return modelo.getImage(path);
+    }
 
 
     public Presenter() {
         appMediador = Mediator.getInstance();
-        tagsActivity = (TagsActivity) appMediador.getTagsActivity();
+        panoramaPreview = (PanoramaPreview) appMediador.getPanoramaPreview();
         modelo = Model.getInstance();
     }
 

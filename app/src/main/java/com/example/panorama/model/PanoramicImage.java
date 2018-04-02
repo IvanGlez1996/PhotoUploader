@@ -1,5 +1,7 @@
 package com.example.panorama.model;
 
+import com.example.panorama.view.PanoramaPreview;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -13,9 +15,8 @@ import io.realm.annotations.PrimaryKey;
 public class PanoramicImage extends RealmObject {
 
     @PrimaryKey
-    private String imageId;
-
     private String path;
+
     private String zone;
     private String date;
     private String latitude;
@@ -26,11 +27,11 @@ public class PanoramicImage extends RealmObject {
     private String humidity;
     private String windVel;
     private String windDir;
+    private String condition;
 
     public PanoramicImage(String path, String zone, String date, String latitude, String longitude,
                           String ilumination, String temperature, String pressure, String humidity,
-                          String windVel, String windDir){
-        this.imageId = UUID.randomUUID().toString();
+                          String windVel, String windDir, String condition){
         this.path = path;
         this.zone = zone;
         this.date = date;
@@ -42,14 +43,11 @@ public class PanoramicImage extends RealmObject {
         this.humidity = humidity;
         this.windVel = windVel;
         this.windDir = windDir;
+        this.condition = condition;
     }
 
-    public String getImageId() {
-        return imageId;
-    }
+    public PanoramicImage(){
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
     }
 
     public String getPath() {
@@ -138,5 +136,13 @@ public class PanoramicImage extends RealmObject {
 
     public void setWindDir(String windDir) {
         this.windDir = windDir;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 }

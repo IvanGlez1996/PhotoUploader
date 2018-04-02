@@ -4,27 +4,16 @@ package com.example.panorama.model;
  * Created by IvanGlez on 29/03/2018.
  */
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-
 import com.example.panorama.Mediator;
-import com.example.panorama.view.GPSSettingsDialog;
-import com.example.panorama.view.TagsActivity;
 
 public class GPSTracker extends Service implements LocationListener {
 

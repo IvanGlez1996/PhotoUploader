@@ -1,5 +1,7 @@
 package com.example.panorama.model;
 
+import android.util.Log;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +31,9 @@ public class DatabaseFacade {
     /////////////////////////////////////////////////////////////////////////////////////
 
     public void addPanoramicImageToDatabase(String path, String zone, String date, String latitude, String longitude,
-    String ilumination, String temperature, String pressure, String humidity, String windVel, String windDir) {
+    String ilumination, String temperature, String pressure, String humidity, String condition, String windVel, String windDir) {
         realmDatabase.beginTransaction();
-        PanoramicImage image = realmDatabase.createObject(PanoramicImage.class, UUID.randomUUID().toString());
-        image.setPath(path);
+        PanoramicImage image = realmDatabase.createObject(PanoramicImage.class, path);
         image.setZone(zone);
         image.setDate(date);
         image.setLatitude(latitude);
@@ -41,23 +42,28 @@ public class DatabaseFacade {
         image.setTemperature(temperature);
         image.setPressure(pressure);
         image.setHumidity(humidity);
+        image.setCondition(condition);
         image.setWindVel(windVel);
         image.setWindDir(windDir);
         realmDatabase.commitTransaction();
+
+        Log.d("Database", "Adición exitosa");
     }
 
     public List<PanoramicImage> getImagesFromDatabase(){
         return realmDatabase.where(PanoramicImage.class).findAll();
     }
 
-    public PanoramicImage getImageFromDatabase(String imageId){
-        return realmDatabase.where(PanoramicImage.class).equalTo("imageId", imageId).findFirst();
+    public PanoramicImage getImageFromDatabase(String path){
+        PanoramicImage image = realmDatabase.where(PanoramicImage.class).equalTo("path", path).findFirst();
+        String weather = image.getCondition();
+        return image;
     }
 
-    public void addCustomTagToDatabase(String imageId, String name){
+    public void addCustomTagToDatabase(String imagePath, String name){
         realmDatabase.beginTransaction();
         CustomTag customTag = realmDatabase.createObject(CustomTag.class, UUID.randomUUID().toString());
-        customTag.setImage(imageId);
+        customTag.setImage(imagePath);
         customTag.setName(name);
 
     }

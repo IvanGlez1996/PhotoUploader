@@ -44,7 +44,7 @@
             android:layout_height="30dp"
             android:background="@android:color/white"
             android:clickable="true"
-            android:text="Cancel"
+            android:text="CANCEL"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
 
