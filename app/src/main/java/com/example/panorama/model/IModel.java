@@ -17,4 +17,7 @@ public interface IModel {
     void deleteTagFromDatabase(String id);
 
     List<CustomTag> getImageTagsFromDatabase(String imagePath);
+
+    List<PanoramicImage> getImages();
+
 }

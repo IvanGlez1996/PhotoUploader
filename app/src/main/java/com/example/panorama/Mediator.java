@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.example.panorama.model.ModuleCustomTagsPanoramicImage;
 import com.example.panorama.presenter.IPresenter;
 import com.example.panorama.presenter.Presenter;
+import com.example.panorama.view.IImageListActivity;
 import com.example.panorama.view.IMainActivity;
 import com.example.panorama.view.IPanoramaPreview;
 import com.example.panorama.view.ITagsActivity;
@@ -31,6 +32,7 @@ public class Mediator extends Application {
     private IMainActivity mainView;
     private ITagsActivity tagsActivity;
     private IPanoramaPreview panoramaPreview;
+    private IImageListActivity imageListActivity;
 
     // constantes de comunicación, almacenamiento y petición
     public static final int ZOOM = 12; //este valor debería ser una preferencia de la aplicación, pero como no tenemos...
@@ -91,6 +93,14 @@ public class Mediator extends Application {
 
     public void setPanoramaPreview(IPanoramaPreview panoramaPreview) {
         this.panoramaPreview = panoramaPreview;
+    }
+
+    public IImageListActivity getImageListActivity() {
+        return imageListActivity;
+    }
+
+    public void setImageListActivity(IImageListActivity imageListActivity) {
+        this.imageListActivity = imageListActivity;
     }
 
     // Métodos destinados a la navegación en la aplicación y a la definición de servicios

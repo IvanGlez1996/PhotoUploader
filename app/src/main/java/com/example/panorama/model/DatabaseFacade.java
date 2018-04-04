@@ -51,7 +51,9 @@ public class DatabaseFacade {
     }
 
     public List<PanoramicImage> getImagesFromDatabase(){
-        return realmDatabase.where(PanoramicImage.class).findAll();
+        List<PanoramicImage> list = realmDatabase.where(PanoramicImage.class).findAll();
+        List<PanoramicImage> newList = realmDatabase.copyFromRealm(list);
+        return newList;
     }
 
     public PanoramicImage getImageFromDatabase(String path){
@@ -73,7 +75,6 @@ public class DatabaseFacade {
 
     public List<CustomTag> getImageCustomTagsFromDatabase(String imagePath){
         List<CustomTag> result = realmDatabase.where(CustomTag.class).equalTo("imagePath", imagePath).findAll();
-        Log.d("CustomTagId", result.get(0).getCustomTagId());
         return result;
     }
 

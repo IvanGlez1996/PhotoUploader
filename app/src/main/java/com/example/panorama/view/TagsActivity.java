@@ -21,6 +21,7 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -32,7 +33,7 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<CustomTag> datos;
+    private List<CustomTag> datos;
     private FloatingActionButton addTagBtn;
     private VrPanoramaView mVrPanoramaView;
     private Toolbar toolbar;
@@ -50,9 +51,12 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
         mediator = Mediator.getInstance();
         mediator.setTagsActivity(this);
 
+        Intent i = getIntent();
+        imagePath = i.getStringExtra("imagePath");
+
         mRecyclerView = (RecyclerView) findViewById(R.id.lista);
 
-        datos = new ArrayList<>();
+        datos = mediator.getPresenter().getImageTagsFromDatabase(imagePath);
 
         addTagBtn = (FloatingActionButton) findViewById(R.id.floatingAddButton);
         addTagBtn.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +81,6 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
 
         mVrPanoramaView = (VrPanoramaView) findViewById(R.id.pano_view);
 
-        loadPhotoSphere();
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -90,6 +93,8 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
         // specify an adapter (see also next example)
         mAdapter = new Adapter(datos);
         mRecyclerView.setAdapter(mAdapter);
+
+        loadPhotoSphere();
     }
 
 
@@ -129,18 +134,15 @@ public class TagsActivity extends AppCompatActivity implements ITagsActivity {
 
     public void addNewTag(String tag) {
         CustomTag customTag = new CustomTag(tag, imagePath);
-        datos.add(customTag);
-        mAdapter.notifyDataSetChanged();
         mediator.getPresenter().saveTagIntoDatabase(customTag.getCustomTagId(), imagePath, tag);
+        mAdapter.notifyDataSetChanged();
+
     }
 
     private void loadPhotoSphere() {
         //This could take a while. Should do on a background thread, but fine for current example
         VrPanoramaView.Options options = new VrPanoramaView.Options();
 
-
-        Intent i = getIntent();
-        imagePath = i.getStringExtra("imagePath");
         File imgFile = new File(imagePath);
 
         if (imgFile.exists()) {

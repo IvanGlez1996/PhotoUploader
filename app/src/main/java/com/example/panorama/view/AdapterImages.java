@@ -1,20 +1,26 @@
 package com.example.panorama.view;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.panorama.Mediator;
 import com.example.panorama.R;
 import com.example.panorama.model.CustomTag;
+import com.example.panorama.model.PanoramicImage;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -22,8 +28,8 @@ import java.util.List;
  * Created by IvanGlez on 14/03/2018.
  */
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private List<CustomTag> mDataset;
+public class AdapterImages extends RecyclerView.Adapter<AdapterImages.ViewHolder> {
+    private List<PanoramicImage> mDataset;
     private AdapterView.OnItemClickListener mItemClickListener;
     private Mediator mediator;
 
@@ -32,51 +38,57 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // each data item is just a string in this case
-        public TextView mTextView;
-        private ImageView deleteIcon;
+
+
+        public TextView location, date;
+        public ImageView image;
+        public CardView cardView;
 
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.tag_item);
-            deleteIcon = (ImageView) v.findViewById(R.id.crossButton);
 
-            deleteIcon.setOnClickListener(this);
+            cardView = v.findViewById(R.id.cv);
+            image = v.findViewById(R.id.imageView);
+            location = v.findViewById(R.id.location);
+            date = v.findViewById(R.id.date);
+
+            cardView.setOnClickListener(this);
             v.setOnClickListener(this);
+
 
             mediator = Mediator.getInstance();
         }
-
 
         @Override
         public void onClick(View v) {
             //Log.d("View: ", v.toString());
             //Toast.makeText(v.getContext(), mTextViewTitle.getText() + " position = " + getPosition(), Toast.LENGTH_SHORT).show();
-            if (v.equals(deleteIcon)) {
-                mediator.getPresenter().deleteTagFromDatabase(mDataset.get(getAdapterPosition()).getCustomTagId());
-                notifyItemRemoved(getAdapterPosition());
-                notifyItemRangeChanged(getAdapterPosition(), mDataset.size());
+            if (v.equals(cardView)) {
+                mediator.getImageListActivity().goToTagsActivity(mDataset.get(getAdapterPosition()).getPath());
             }
         }
+
 
 
     }
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public Adapter(List<CustomTag> myDataset) {
+    public AdapterImages(List<PanoramicImage> myDataset) {
         mDataset = myDataset;
+
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public Adapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public AdapterImages.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                       int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_tag_item, parent, false);
+                .inflate(R.layout.layout_imageslist_item, parent, false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder((RelativeLayout) v);
         return vh;
@@ -87,7 +99,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset.get(position).getName());
+        File imgFile = new  File(mDataset.get(position).getPath());
+
+        if(imgFile.exists()) {
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+            holder.image.setImageBitmap(myBitmap);
+        }
+
+        holder.location.setText(mDataset.get(position).getZone());
+        holder.date.setText(mDataset.get(position).getDate());
 
     }
 
@@ -97,15 +119,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return mDataset.size();
     }
 
-    public void setOnItemClickListener(final AdapterView.OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
-    }
 
-    public void removeAt(int position) {
-        mDataset.remove(position);
-
-
-    }
 }
 
 

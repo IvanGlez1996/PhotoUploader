@@ -46,4 +46,9 @@ public class Model implements IModel {
     public List<CustomTag> getImageTagsFromDatabase(String imagePath) {
         return database.getImageCustomTagsFromDatabase(imagePath);
     }
+
+    @Override
+    public List<PanoramicImage> getImages() {
+        return database.getImagesFromDatabase();
+    }
 }

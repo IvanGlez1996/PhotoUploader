@@ -21,44 +21,45 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
  * Created by IvanGlez on 14/03/2018.
  */
 
-public class ImageListActivity extends AppCompatActivity implements ITagsActivity {
+public class ImageListActivity extends AppCompatActivity implements IImageListActivity{
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<CustomTag> datos;
-    private FloatingActionButton addTagBtn;
-    private VrPanoramaView mVrPanoramaView;
+    private List<PanoramicImage> datos;
+    private FloatingActionButton cameraBtn;
     private Toolbar toolbar;
     private Mediator mediator;
     private ImageView uploadBtn;
-    private ArrayList<String> sensorTags;
     private String imagePath;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tags);
+        setContentView(R.layout.activity_image_list);
 
         mediator = Mediator.getInstance();
-        mediator.setTagsActivity(this);
+        mediator.setImageListActivity(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.lista);
 
-        datos = new ArrayList<>();
+        datos = mediator.getPresenter().getImages();
 
-        addTagBtn = (FloatingActionButton) findViewById(R.id.floatingAddButton);
-        addTagBtn.setOnClickListener(new View.OnClickListener() {
+        cameraBtn = (FloatingActionButton) findViewById(R.id.floatingCameraBtn);
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddTagAlert();
+                Intent i = new Intent(ImageListActivity.this, MainActivity.class);
+                ImageListActivity.this.startActivity(i);
             }
         });
 
@@ -75,9 +76,7 @@ public class ImageListActivity extends AppCompatActivity implements ITagsActivit
         });
 
 
-        mVrPanoramaView = (VrPanoramaView) findViewById(R.id.pano_view);
 
-        loadPhotoSphere();
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -88,77 +87,31 @@ public class ImageListActivity extends AppCompatActivity implements ITagsActivit
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new Adapter(datos);
+
+        Collections.reverse(datos);
+        mAdapter = new AdapterImages(datos);
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
-
-
-
-    public void showAddTagAlert() {
-        /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Add a new tag");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Tag name");
-        alert.setView(input);
-        alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String inputText = input.getText().toString();
-                datos.add(inputText);
-            }
-        });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-        alert.show();*/
-
-        AddTagDialog cdd = new AddTagDialog(ImageListActivity.this);
-        cdd.show();
-    }
 
     public void showUploadDialog(){
         UploadDialog dialog = new UploadDialog(ImageListActivity.this);
         dialog.show();
     }
 
-    public void addNewTag(String tag) {
-        CustomTag customTag = new CustomTag(tag, imagePath);
-        datos.add(customTag);
-        mAdapter.notifyDataSetChanged();
-        mediator.getPresenter().saveTagIntoDatabase(customTag.getCustomTagId(), imagePath, tag);
-    }
-
-    private void loadPhotoSphere() {
-        //This could take a while. Should do on a background thread, but fine for current example
-        VrPanoramaView.Options options = new VrPanoramaView.Options();
-
-
-        Intent i = getIntent();
-        imagePath = i.getStringExtra("imagePath");
-        File imgFile = new File(imagePath);
-
-        if (imgFile.exists()) {
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-
-            options.inputType = VrPanoramaView.Options.TYPE_MONO;
-            mVrPanoramaView.loadImageFromBitmap(myBitmap, options);
-        } else {
-            Log.d("Error", "La imagen no existe");
-        }
+    @Override
+    public void goToTagsActivity(String imagePath){
+        Bundle extras = new Bundle();
+        extras.putString("imagePath", imagePath);
+        Intent i = new Intent(ImageListActivity.this, TagsActivity.class);
+        if (extras != null)
+            i.putExtras(extras);
+        ImageListActivity.this.startActivity(i);
     }
 
 
     @Override
     protected void onPause() {
-        mVrPanoramaView.pauseRendering();
         super.onPause();
 
     }
@@ -166,17 +119,14 @@ public class ImageListActivity extends AppCompatActivity implements ITagsActivit
     @Override
     protected void onResume() {
         super.onResume();
-        mVrPanoramaView.resumeRendering();
+        if(mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     protected void onDestroy() {
-        mVrPanoramaView.shutdown();
         super.onDestroy();
-    }
-
-    public PanoramicImage getImage(){
-        return mediator.getPresenter().getImage(imagePath);
     }
 
 

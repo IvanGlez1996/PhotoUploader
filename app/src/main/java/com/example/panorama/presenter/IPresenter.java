@@ -19,5 +19,10 @@ public interface IPresenter {
     void deleteTagFromDatabase(String id);
 
     List<CustomTag> getImageTagsFromDatabase(String imagePath);
+
+    List<PanoramicImage> getImages();
+
+
+
 }
 

@@ -29,9 +29,11 @@ public class Presenter implements IPresenter {
             if(intent.getAction().equals(Mediator.AVISO_NUEVA_INFORMACION)){
                 ArrayList<String> data = intent.getStringArrayListExtra(Mediator.CLAVE_INFORMACION);
                 if (data != null){
+                    panoramaPreview = (PanoramaPreview) appMediador.getPanoramaPreview();
                     panoramaPreview.setWeatherTags(data);
                 }
             }
+            appMediador.unRegisterReceiver(this);
         }
     };
 
@@ -63,6 +65,11 @@ public class Presenter implements IPresenter {
     @Override
     public List<CustomTag> getImageTagsFromDatabase(String imagePath) {
         return modelo.getImageTagsFromDatabase(imagePath);
+    }
+
+    @Override
+    public List<PanoramicImage> getImages() {
+        return modelo.getImages();
     }
 
 

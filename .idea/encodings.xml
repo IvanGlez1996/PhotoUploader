@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/panorama/view/Adapter.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/panorama/view/AdapterDialog.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/panorama/view/AdapterImages.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/layout_tag_item.xml" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/layout_tag_item_dialog.xml" charset="ISO-8859-1" />
   </component>
