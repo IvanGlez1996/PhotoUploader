@@ -39,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements IMainActivity{
     static{
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     private LinearLayout linearLayout; // used to place the two buttons
     private Mediator mediator;
     private GPSTracker gps;
+    private int count;
 
 
     private List<Mat> listImage = new ArrayList<>();
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
 
         gps = new GPSTracker(MainActivity.this);
 
+        count = 0;
+
         if(!gps.canGetLocation()){
 
             // can't get location
@@ -98,6 +102,15 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                 // set the flag to false so we don't take two picture at a same time
                 safeToTakePicture = false;
                 mCam.takePicture(null, null, jpegCallback);
+                count++;
+                if(count >=  2){
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    saveBtn.setVisibility(View.VISIBLE);
+                }
             }
         }
     };
@@ -183,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "File saved at: " + fileName, Toast.LENGTH_LONG).show();
                         Bundle extras = new Bundle();
                         extras.putString("fileName", fileName);
                         Intent i = new Intent(MainActivity.this, PanoramaPreview.class);
@@ -252,10 +264,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                 mCam.startPreview();
                 isPreview = true;
 
-                Toast.makeText(getApplicationContext(),
-                        "Best Size:\n" +
-                                String.valueOf(myBestSize.width) + " : " + String.valueOf(myBestSize.height),
-                        Toast.LENGTH_LONG).show();
             }
 
         }
@@ -301,6 +309,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     protected void onResume() {
         super.onResume();
         mCam = Camera.open(0); // 0 for back camera
+        count = 0;
+        saveBtn.setVisibility(View.GONE);
     }
     @Override
     protected void onPause() {

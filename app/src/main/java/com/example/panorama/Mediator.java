@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.example.panorama.model.DatabaseFacade;
 import com.example.panorama.model.ModuleCustomTagsPanoramicImage;
 import com.example.panorama.presenter.IPresenter;
 import com.example.panorama.presenter.Presenter;
@@ -165,5 +166,7 @@ public class Mediator extends Application {
                 .modules(new ModuleCustomTagsPanoramicImage())
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+
+        //DatabaseFacade.getInstance().deleteDatabase();
     }
 }

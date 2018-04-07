@@ -20,4 +20,6 @@ public interface IModel {
 
     List<PanoramicImage> getImages();
 
+    void deleteImageFromDatabase(String path);
+
 }

@@ -52,8 +52,6 @@ public class ImageListActivity extends AppCompatActivity implements IImageListAc
 
         mRecyclerView = (RecyclerView) findViewById(R.id.lista);
 
-        datos = mediator.getPresenter().getImages();
-
         cameraBtn = (FloatingActionButton) findViewById(R.id.floatingCameraBtn);
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +86,7 @@ public class ImageListActivity extends AppCompatActivity implements IImageListAc
 
         // specify an adapter (see also next example)
 
-        Collections.reverse(datos);
-        mAdapter = new AdapterImages(datos);
-        mRecyclerView.setAdapter(mAdapter);
+        setAdapter();
     }
 
 
@@ -120,6 +116,14 @@ public class ImageListActivity extends AppCompatActivity implements IImageListAc
     protected void onResume() {
         super.onResume();
         if(mAdapter != null) {
+            setAdapter();
+        }
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        if(mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -127,6 +131,21 @@ public class ImageListActivity extends AppCompatActivity implements IImageListAc
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public void setAdapter(){
+        datos = mediator.getPresenter().getImages();
+        for(int i = 0; i < datos.size(); i++) {
+            String path = datos.get(i).getPath();
+            File file = new File(path);
+            if(!file.exists()){
+                mediator.getPresenter().deleteImageFromDatabase(path);
+                datos.remove(i);
+            }
+        }
+        Collections.reverse(datos);
+        mAdapter = new AdapterImages(datos);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
 

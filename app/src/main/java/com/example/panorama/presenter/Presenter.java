@@ -72,6 +72,11 @@ public class Presenter implements IPresenter {
         return modelo.getImages();
     }
 
+    @Override
+    public void deleteImageFromDatabase(String path) {
+        modelo.deleteImageFromDatabase(path);
+    }
+
 
     public Presenter() {
         appMediador = Mediator.getInstance();

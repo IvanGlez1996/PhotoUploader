@@ -22,6 +22,8 @@ public interface IPresenter {
 
     List<PanoramicImage> getImages();
 
+    void deleteImageFromDatabase(String path);
+
 
 
 }

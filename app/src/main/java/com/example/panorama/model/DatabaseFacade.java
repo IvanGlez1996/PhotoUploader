@@ -47,6 +47,7 @@ public class DatabaseFacade {
         image.setWindDir(windDir);
         realmDatabase.commitTransaction();
 
+
         Log.d("Database", "Adición exitosa");
     }
 
@@ -81,6 +82,18 @@ public class DatabaseFacade {
     public void deleteTagFromDatabase(final String tagId) {
         realmDatabase.beginTransaction();
         realmDatabase.where(CustomTag.class).equalTo("customTagId", tagId).findAll().deleteAllFromRealm();
+        realmDatabase.commitTransaction();
+    }
+
+    public void deleteDatabase(){
+        realmDatabase.beginTransaction();
+        realmDatabase.deleteAll();
+        realmDatabase.commitTransaction();
+    }
+
+    public void deleteImageFromDatabase(final String imagePath) {
+        realmDatabase.beginTransaction();
+        realmDatabase.where(PanoramicImage.class).equalTo("path", imagePath).findAll().deleteAllFromRealm();
         realmDatabase.commitTransaction();
     }
 

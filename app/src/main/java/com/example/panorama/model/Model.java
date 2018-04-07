@@ -51,4 +51,9 @@ public class Model implements IModel {
     public List<PanoramicImage> getImages() {
         return database.getImagesFromDatabase();
     }
+
+    @Override
+    public void deleteImageFromDatabase(String path) {
+        database.deleteImageFromDatabase(path);
+    }
 }
