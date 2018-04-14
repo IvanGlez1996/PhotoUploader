@@ -31,7 +31,6 @@
                 android:layout_gravity="right"
                 android:adjustViewBounds="true"
                 android:src="@drawable/upload_button"
-                android:visibility="gone"
                 android:clickable="true"/>
         </android.support.v7.widget.Toolbar>
 
@@ -46,25 +45,48 @@
                 android:layout_marginTop="?attr/actionBarSize">
 
 
+    <com.google.vr.sdk.widgets.pano.VrPanoramaView
+        android:id="@+id/pano_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+
+    <TextView
+        android:id="@+id/titleTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Tags"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="24dp"
+        android:textStyle="bold"/>
+
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lista"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager" />
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/margin"
+            android:layout_alignParentTop="true"
+            android:layout_margin="16dp"
+            app:layoutManager="LinearLayoutManager"/>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingCameraBtn"
+            android:id="@+id/floatingAddButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             android:clickable="true"
             android:elevation="8dp"
@@ -72,7 +94,18 @@
             app:backgroundTint="@color/colorPrimaryDark"
             app:borderWidth="0dp"
             app:fabSize="normal"
-            app:srcCompat="@drawable/photo_camera"/>
+            app:srcCompat="@drawable/plus_white_symbol"/>
+
+        <LinearLayout
+            android:id="@+id/margin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            >
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 

@@ -58,18 +58,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile project(':opencv-java')
+    implementation project(':opencv-java')
 
     implementation 'com.android.support:design:27.1.0'
-    compile 'com.android.support:support-v4:27.1.0'
-    compile 'com.android.support:recyclerview-v7:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
-    compile 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-7'
-    compile 'com.google.vr:sdk-panowidget:1.130.0'
-    compile 'com.google.vr:sdk-common:1.130.0'
-    compile 'com.google.vr:sdk-commonwidget:1.130.0'
-    compile 'com.google.android.gms:play-services:12.0.0'
-    compile 'com.google.android.gms:play-services-location:12.0.0'
+    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.0'
+    implementation 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-7'
+    implementation 'com.google.vr:sdk-panowidget:1.130.0'
+    implementation 'com.google.vr:sdk-common:1.130.0'
+    implementation 'com.google.vr:sdk-commonwidget:1.130.0'
+    implementation 'com.google.android.gms:play-services:12.0.0'
+    implementation 'com.google.android.gms:play-services-location:12.0.0'
 }

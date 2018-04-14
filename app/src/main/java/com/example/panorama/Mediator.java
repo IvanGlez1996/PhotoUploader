@@ -8,15 +8,19 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.example.panorama.model.DatabaseFacade;
-import com.example.panorama.model.ModuleCustomTagsPanoramicImage;
-import com.example.panorama.presenter.IPresenter;
-import com.example.panorama.presenter.Presenter;
-import com.example.panorama.view.IImageListActivity;
-import com.example.panorama.view.IMainActivity;
-import com.example.panorama.view.IPanoramaPreview;
-import com.example.panorama.view.ITagsActivity;
-import com.example.panorama.view.TagsActivity;
+import com.example.panorama.model.database.ModuleCustomTagsPanoramicImage;
+import com.example.panorama.presenter.IPresenterImageList;
+import com.example.panorama.presenter.IPresenterMainActivity;
+import com.example.panorama.presenter.IPresenterPanoramaPreview;
+import com.example.panorama.presenter.IPresenterUploadImage;
+import com.example.panorama.presenter.PresenterImageList;
+import com.example.panorama.presenter.PresenterMainActivity;
+import com.example.panorama.presenter.PresenterPanoramaPreview;
+import com.example.panorama.presenter.PresenterUploadImage;
+import com.example.panorama.view.IActivityImageList;
+import com.example.panorama.view.IActivityMain;
+import com.example.panorama.view.IActivityPanoramaPreview;
+import com.example.panorama.view.IActivityUploadImage;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -28,86 +32,111 @@ import io.realm.RealmConfiguration;
 public class Mediator extends Application {
     private static Mediator singleton;
 
-    // variables correspondientes a los presentadores, vistas y modelo
-    private IPresenter presenter;
-    private IMainActivity mainView;
-    private ITagsActivity tagsActivity;
-    private IPanoramaPreview panoramaPreview;
-    private IImageListActivity imageListActivity;
+    // Variables corresponding to views, presenters and models
+    private IActivityMain mainView;
+    private IActivityUploadImage activityUploadImage;
+    private IActivityPanoramaPreview activityPanoramaPreview;
+    private IActivityImageList imageListActivity;
+    private IPresenterMainActivity presenterMainActivity;
+    private IPresenterUploadImage presenterUploadImage;
+    private IPresenterPanoramaPreview presenterPanoramaPreview;
+    private IPresenterImageList presenterImageList;
 
-    // constantes de comunicación, almacenamiento y petición
-    public static final int ZOOM = 12; //este valor debería ser una preferencia de la aplicación, pero como no tenemos...
-    public static final int ESTADO_INICIAL = 0;
-    public static final int ESTADO_AGREGAR_MARCA = 1;
-    public static final int ESTADO_BORRAR_MARCA = 2;
-    public static final String CLAVE_LATITUD = "latitud";
-    public static final String CLAVE_LONGITUD = "longitud";
-    public static final String CLAVE_TITULO = "titulo";
-    public static final String CLAVE_MARCAS = "marcas";
 
-    public static final String AVISO_ESTADO_INICIAL = "pem.tema4.AVISO_ESTADO_INICIAL";
-    public static final String AVISO_LOCALIZACION_GPS = "pem.tema4.AVISO_LOCALIZACION_GPS";
-    public static final String AVISO_AGREGAR_MARCA = "pem.tema4.AVISO_AGREGAR_MARCA";
-    public static final String AVISO_BORRAR_MARCA = "pem.tema4.AVISO_BORRAR_MARCA";
+    public static final String WEATHER_INFO = "com.example.panorama.WEATHER_INFO";
+    public static final String WEATHER_DATA = "WEATHER_DATA";
 
-    public static final String AVISO_NUEVA_INFORMACION = "pem.tema4.vista.AVISO_NUEVA_INFORMACION";
+    public static final String UNIT = "metric"; // Temperature units will be Celsius
+    public static final String KEY = "100aa2ed5976d1aa9602749889a27156";  // OpenWeatherMap personal API Key
 
-    public static final String CLAVE_INFORMACION = "CLAVE_INFORMACION";
 
-    public static final String UNIDAD = "metric"; // los grados de la temperatura se miden en Celsius
-    public static final String CLAVE = "b7f61c141a936a171b60327be1c12fb5";  // clave de open weather (ésta es la mía)
 
     public static Mediator getInstance(){
         return singleton;
     }
 
-    // Métodos accessor de los presentadores, vistas y modelo
-    public IPresenter getPresenter() {
-        if (presenter == null)
-            presenter = new Presenter();
-        return presenter;
-    }
 
-    public void removePresentadorMapa() {
-        presenter = null;
-    }
 
-    public IMainActivity getMainView() {
+    ///////////////////////////// METHODS TO ACCESS VIEWS, PRESENTERS AND MODELS ////////////////////////////////////////////
+
+    // VIEWS
+
+    public IActivityMain getActivityMain() {
         return mainView;
     }
 
-    public ITagsActivity getTagsActivity() {
-        return tagsActivity;
+    public IActivityUploadImage getActivityUploadImage() {
+        return activityUploadImage;
     }
 
-    public void setMainView(IMainActivity mainView) {
-        this.mainView = mainView;
+    public IActivityPanoramaPreview getActivityPanoramaPreview() {
+        return activityPanoramaPreview;
     }
 
-    public void setTagsActivity(ITagsActivity tagsActivity) {
-        this.tagsActivity = tagsActivity;
-    }
-
-    public IPanoramaPreview getPanoramaPreview() {
-        return panoramaPreview;
-    }
-
-    public void setPanoramaPreview(IPanoramaPreview panoramaPreview) {
-        this.panoramaPreview = panoramaPreview;
-    }
-
-    public IImageListActivity getImageListActivity() {
+    public IActivityImageList getActivityImageList() {
         return imageListActivity;
     }
 
-    public void setImageListActivity(IImageListActivity imageListActivity) {
+    public void setMainView(IActivityMain mainView) {
+        this.mainView = mainView;
+    }
+
+    public void setActivityUploadImage(IActivityUploadImage activityUploadImage) {
+        this.activityUploadImage = activityUploadImage;
+    }
+
+    public void setActivityPanoramaPreview(IActivityPanoramaPreview activityPanoramaPreview) {
+        this.activityPanoramaPreview = activityPanoramaPreview;
+    }
+
+    public void setImageListActivity(IActivityImageList imageListActivity) {
         this.imageListActivity = imageListActivity;
     }
 
-    // Métodos destinados a la navegación en la aplicación y a la definición de servicios
+    //PRESENTERS
 
+    public IPresenterMainActivity getPresenterMainActivity() {
+        if (presenterMainActivity == null)
+            presenterMainActivity = new PresenterMainActivity();
+        return presenterMainActivity;
+    }
 
-    // Métodos de manejo de los componentes de Android
+    public IPresenterUploadImage getPresenterUploadImage() {
+        if (presenterUploadImage == null)
+            presenterUploadImage = new PresenterUploadImage();
+        return presenterUploadImage;
+    }
+
+    public IPresenterPanoramaPreview getPresenterPanoramaPreview() {
+        if (presenterPanoramaPreview == null)
+            presenterPanoramaPreview = new PresenterPanoramaPreview();
+        return presenterPanoramaPreview;
+    }
+
+    public IPresenterImageList getPresenterImageList() {
+        if (presenterImageList == null)
+            presenterImageList = new PresenterImageList();
+        return presenterImageList;
+    }
+
+    public void removePresenterMainActivity() {
+        presenterMainActivity = null;
+    }
+
+    public void removePresenterUploadImage() {
+        presenterUploadImage = null;
+    }
+
+    public void removePresenterPanoramaPreview() {
+        presenterPanoramaPreview = null;
+    }
+
+    public void removePresenterImageList() {
+        presenterImageList = null;
+    }
+
+    //////////////////////////////////// METHODS TO NAVIGATE BETWEEN ACTIVITIES /////////////////////////////////////////////////
+
     public void launchActivity(Class actividadInvocada, Object invocador, Bundle extras) {
         Intent i = new Intent(this, actividadInvocada);
         if (extras != null)
@@ -156,9 +185,11 @@ public class Mediator extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        presenter = null;
+        presenterUploadImage = null;
         singleton = this;
         Realm.init(this);
+
+        // initialization of the database
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name("panoramaimages.realm")
                 .deleteRealmIfMigrationNeeded()
