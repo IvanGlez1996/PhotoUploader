@@ -2,13 +2,12 @@ package com.example.panorama.view;
 
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
 
 /**
  * Created by IvanGlez on 01/04/2018.
  */
 
-public interface IActivityPanoramaPreview {
+public interface IActivityImagePreview {
 
     void showImage(Bitmap myBitmap);
 
@@ -18,9 +17,7 @@ public interface IActivityPanoramaPreview {
 
     void registerSensorListener();
 
-    void saveImageIntoDatabase(ArrayList<String> data);
-
-    String getFilename();
+    String getImagePath();
 
     void finishActivity();
 }

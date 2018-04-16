@@ -13,8 +13,6 @@ import com.example.panorama.R;
 import com.example.panorama.model.database.PanoramicImage;
 import com.example.panorama.view.adapters.AdapterImages;
 
-import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -46,7 +44,7 @@ public class ActivityImageList extends AppCompatActivity implements IActivityIma
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediator.launchActivity(ActivityMain.class, ActivityImageList.this, null);
+                mediator.launchActivity(ActivityCamera.class, ActivityImageList.this, null);
             }
         });
 

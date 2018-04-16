@@ -1,10 +1,9 @@
 package com.example.panorama.presenter;
 
 import com.example.panorama.Mediator;
-import com.example.panorama.model.IModelPanoramaPreview;
-import com.example.panorama.model.ModelPanoramaPreview;
+import com.example.panorama.model.IModelImageList;
+import com.example.panorama.model.ModelImageList;
 import com.example.panorama.model.database.PanoramicImage;
-import com.example.panorama.view.ActivityImageList;
 import com.example.panorama.view.IActivityImageList;
 
 import java.io.File;
@@ -16,12 +15,12 @@ public class PresenterImageList implements IPresenterImageList {
 
     private Mediator mediator;
     private IActivityImageList imageListActivity;
-    private IModelPanoramaPreview model;
+    private IModelImageList model;
 
     public PresenterImageList() {
         mediator = Mediator.getInstance();
         imageListActivity = mediator.getActivityImageList();
-        model = ModelPanoramaPreview.getInstance();
+        model = ModelImageList.getInstance();
     }
 
     @Override

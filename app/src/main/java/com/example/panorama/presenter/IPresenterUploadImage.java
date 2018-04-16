@@ -3,13 +3,9 @@ package com.example.panorama.presenter;
 import com.example.panorama.model.database.CustomTag;
 import com.example.panorama.model.database.PanoramicImage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface IPresenterUploadImage {
-
-
-    void saveImageIntoDatabase(ArrayList<String> data);
 
     PanoramicImage getImage(String path);
 
@@ -19,11 +15,10 @@ public interface IPresenterUploadImage {
 
     List<CustomTag> getImageTagsFromDatabase(String imagePath);
 
-    List<PanoramicImage> getImages();
+    void loadPhotoSphere(String filename);
 
-    void deleteImageFromDatabase(String path);
+    void showCustomTags(String imagePath);
 
-
-
+    void addNewTag(String tagText, String imagePath);
 }
 

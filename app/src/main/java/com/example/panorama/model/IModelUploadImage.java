@@ -1,5 +1,7 @@
 package com.example.panorama.model;
 
+import android.graphics.Bitmap;
+
 import com.example.panorama.model.database.CustomTag;
 import com.example.panorama.model.database.PanoramicImage;
 
@@ -11,7 +13,6 @@ import java.util.List;
  */
 
 public interface IModelUploadImage {
-    void saveImageIntoDatabase(ArrayList<String> data);
 
     PanoramicImage getImage(String path);
 
@@ -21,8 +22,9 @@ public interface IModelUploadImage {
 
     List<CustomTag> getImageTagsFromDatabase(String imagePath);
 
-    List<PanoramicImage> getImages();
+    Bitmap getPhotoSphere(String filename);
 
-    void deleteImageFromDatabase(String path);
+    boolean getImageFileExists();
 
+    void setImageFileExists(boolean imgFileExists);
 }

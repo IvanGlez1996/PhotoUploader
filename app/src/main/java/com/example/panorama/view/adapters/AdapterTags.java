@@ -20,7 +20,7 @@ import java.util.List;
  * Created by IvanGlez on 14/03/2018.
  */
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class AdapterTags extends RecyclerView.Adapter<AdapterTags.ViewHolder> {
     private List<CustomTag> mDataset;
     private AdapterView.OnItemClickListener mItemClickListener;
     private Mediator mediator;
@@ -64,14 +64,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public Adapter(List<CustomTag> myDataset) {
+    public AdapterTags(List<CustomTag> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public Adapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public AdapterTags.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                     int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_tag_item, parent, false);

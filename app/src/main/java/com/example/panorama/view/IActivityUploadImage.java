@@ -1,6 +1,10 @@
 package com.example.panorama.view;
 
-import com.example.panorama.model.database.PanoramicImage;
+import android.graphics.Bitmap;
+
+import com.example.panorama.model.database.CustomTag;
+
+import java.util.List;
 
 /**
  * Created by IvanGlez on 15/03/2018.
@@ -8,7 +12,19 @@ import com.example.panorama.model.database.PanoramicImage;
 
 public interface IActivityUploadImage {
 
+    void showAddTagAlert();
+
+    void showUploadDialog();
+
     void addNewTag(String tag);
 
-    PanoramicImage getImage();
+    void notifyAdapterDataSetChanged();
+
+    String getImagePath();
+
+    void setAdapter(List<CustomTag> tags);
+
+    void showCustomTags(String imagePath);
+
+    void showImage(Bitmap myBitmap);
 }

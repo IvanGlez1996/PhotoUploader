@@ -1,8 +1,6 @@
-package com.example.panorama.presenter;
+package com.example.panorama.model;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
@@ -11,16 +9,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.panorama.Mediator;
-import com.example.panorama.model.IModelPanoramaPreview;
-import com.example.panorama.model.ModelPanoramaPreview;
+import com.example.panorama.model.database.DatabaseFacade;
 import com.example.panorama.model.low_level.GPSTracker;
-import com.example.panorama.view.ActivityUploadImage;
-import com.example.panorama.view.IActivityPanoramaPreview;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,87 +25,63 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class PresenterPanoramaPreview implements IPresenterPanoramaPreview, SensorEventListener {
+public class ModelImagePreview implements IModelImagePreview, SensorEventListener {
 
+    private static ModelImagePreview singleton = null;
     private Mediator mediator;
-    private IActivityPanoramaPreview panoramaPreviewActivity;
-    private IModelPanoramaPreview model;
+    private DatabaseFacade database;
     private SensorManager mSensorManager;
     private Sensor mLight;
     private Integer count;
     private GPSTracker gps;
+    private boolean imgFileExists = false;
 
-    private ArrayList<String> tags;
+    private ArrayList<String> tags = new ArrayList<>();
 
-
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(Mediator.WEATHER_INFO)){
-                ArrayList<String> data = intent.getStringArrayListExtra(Mediator.WEATHER_DATA);
-                if (data != null){
-                    setWeatherTags(data);
-                }
-            }
-            mediator.unRegisterReceiver(this);
-        }
-    };
-
-    public PresenterPanoramaPreview() {
+    private ModelImagePreview() {
         mediator = Mediator.getInstance();
-        panoramaPreviewActivity = mediator.getActivityPanoramaPreview();
-        model = ModelPanoramaPreview.getInstance();
-        mSensorManager = (SensorManager) mediator.getSystemService(Context.SENSOR_SERVICE);
+        database = DatabaseFacade.getInstance();
+    }
 
-        if(mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
-            mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        }
-        count = 1;
-
-        tags = new ArrayList<>();
-
-        // create class object
-        gps = new GPSTracker(mediator.getApplicationContext());
-
-        if(!gps.canGetLocation()){
-
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            panoramaPreviewActivity.showSettingsAlert();
-        }
-
-        loadPhotoSphere(panoramaPreviewActivity.getFilename());
-        getWeatherInfo();
-        setTagsValues();
-
+    public static ModelImagePreview getInstance() {
+        if (singleton == null)
+            singleton = new ModelImagePreview();
+        return singleton;
     }
 
     @Override
     public void saveImageIntoDatabase(ArrayList<String> data){
-        model.saveImageIntoDatabase(data);
+        database.addPanoramicImageToDatabase(data.get(0), data.get(3), data.get(4), data.get(1), data.get(2), data.get(5), data.get(6), data.get(7), data.get(8), data.get(9), data.get(10), data.get(11));
     }
 
-    @Override
-    public void getWeatherInfo() {
-        mediator.registerReceiver(receiver, Mediator.WEATHER_INFO);
-    }
 
     @Override
-    public void loadPhotoSphere(String filename) {
+    public Bitmap getPhotoSphere(String filename) {
+        Bitmap result;
         File imgFile = new File(filename);
 
         if (imgFile.exists()) {
-
+            setImageFileExists(true);
             String path = imgFile.getAbsolutePath();
             Bitmap myBitmap = BitmapFactory.decodeFile(path);
             tags.add(path);
 
-            panoramaPreviewActivity.showImage(myBitmap);
+            result = myBitmap;
         } else {
             Log.d("Error", "The image doesn't exist");
+            result = null;
         }
+        return result;
+    }
+
+    @Override
+    public boolean getImageFileExists(){
+        return imgFileExists;
+    }
+
+    @Override
+    public void setImageFileExists(boolean imgFileExists){
+        this.imgFileExists = imgFileExists;
     }
 
     @Override
@@ -129,8 +98,7 @@ public class PresenterPanoramaPreview implements IPresenterPanoramaPreview, Sens
             tags.add(lxStr);
         }
 
-        mSensorManager.unregisterListener(this);
-
+        unregisterSensorListener();
     }
 
     @Override
@@ -198,17 +166,36 @@ public class PresenterPanoramaPreview implements IPresenterPanoramaPreview, Sens
         while (true){
             if (tags.size() == 12) {
                 saveImageIntoDatabase(tags);
-                Toast.makeText(mediator.getApplicationContext(), "File saved at: " + panoramaPreviewActivity.getFilename(), Toast.LENGTH_LONG).show();
-                Bundle extras = new Bundle();
-                extras.putString("imagePath", tags.get(0));
-                mediator.launchActivity(ActivityUploadImage.class, panoramaPreviewActivity, extras);
                 gps.stopUsingGPS();
                 unregisterSensorListener();
-                panoramaPreviewActivity.finishActivity();
                 break;
             }
         }
     }
 
+    @Override
+    public void initSensorsService(){
+        mSensorManager = (SensorManager) mediator.getSystemService(Context.SENSOR_SERVICE);
 
+        if(mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
+            mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        }
+        count = 1;
+    }
+
+    @Override
+    public void initGPSService(){
+        // create class object
+        gps = new GPSTracker(mediator.getApplicationContext());
+    }
+
+    @Override
+    public boolean canGetLocation(){
+        boolean result = false;
+
+        if(gps.canGetLocation()){
+            result = true;
+        }
+        return result;
+    }
 }

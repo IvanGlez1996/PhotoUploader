@@ -78,14 +78,14 @@ public class GPSTracker extends Service implements LocationListener {
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            String urlServidor_Actual = "http://api.openweathermap.org/data/2.5/weather"+
+                            String serverURL = "http://api.openweathermap.org/data/2.5/weather"+
                                     "?lat=" + location.getLatitude() +
                                     "&lon=" + location.getLongitude() +
                                     "&units=" + Mediator.UNIT +
                                     "&mode=json" +
                                     "&appid=" + Mediator.KEY;
 
-                            new WeatherAPIConnection().execute(urlServidor_Actual);
+                            new WeatherAPIConnection().execute(serverURL);
                         }
                     }
                 }
@@ -102,14 +102,14 @@ public class GPSTracker extends Service implements LocationListener {
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                String urlServidor_Actual = "http://api.openweathermap.org/data/2.5/weather"+
+                                String serverURL = "http://api.openweathermap.org/data/2.5/weather"+
                                         "?lat=" + location.getLatitude() +
                                         "&lon=" + location.getLongitude() +
                                         "&units=" + Mediator.UNIT +
                                         "&mode=json" +
                                         "&appid=" + Mediator.KEY;
 
-                                new WeatherAPIConnection().execute(urlServidor_Actual);
+                                new WeatherAPIConnection().execute(serverURL);
                             }
                         }
                     }

@@ -1,10 +1,15 @@
 package com.example.panorama.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import com.example.panorama.Mediator;
 import com.example.panorama.model.database.CustomTag;
 import com.example.panorama.model.database.DatabaseFacade;
 import com.example.panorama.model.database.PanoramicImage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +17,11 @@ import java.util.List;
 public class ModelUploadImage implements IModelUploadImage {
 
     private static ModelUploadImage singleton = null;
-    private Mediator appMediador;
     private DatabaseFacade database;
+    private boolean imgFileExists = false;
+
 
     private ModelUploadImage() {
-        appMediador = Mediator.getInstance();
         database = DatabaseFacade.getInstance();
     }
 
@@ -24,10 +29,6 @@ public class ModelUploadImage implements IModelUploadImage {
         if (singleton == null)
             singleton = new ModelUploadImage();
         return singleton;
-    }
-
-    public void saveImageIntoDatabase(ArrayList<String> data){
-        database.addPanoramicImageToDatabase(data.get(0), data.get(3), data.get(4), data.get(1), data.get(2), data.get(5), data.get(6), data.get(7), data.get(8), data.get(9), data.get(10), data.get(11));
     }
 
     @Override
@@ -51,12 +52,30 @@ public class ModelUploadImage implements IModelUploadImage {
     }
 
     @Override
-    public List<PanoramicImage> getImages() {
-        return database.getImagesFromDatabase();
+    public Bitmap getPhotoSphere(String filename) {
+        Bitmap result;
+        File imgFile = new File(filename);
+
+        if (imgFile.exists()) {
+            setImageFileExists(true);
+            String path = imgFile.getAbsolutePath();
+            Bitmap myBitmap = BitmapFactory.decodeFile(path);
+
+            result = myBitmap;
+        } else {
+            Log.d("Error", "The image doesn't exist");
+            result = null;
+        }
+        return result;
     }
 
     @Override
-    public void deleteImageFromDatabase(String path) {
-        database.deleteImageFromDatabase(path);
+    public boolean getImageFileExists(){
+        return imgFileExists;
+    }
+
+    @Override
+    public void setImageFileExists(boolean imgFileExists){
+        this.imgFileExists = imgFileExists;
     }
 }

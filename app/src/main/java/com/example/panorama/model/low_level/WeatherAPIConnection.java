@@ -32,7 +32,6 @@ public class WeatherAPIConnection extends AsyncTask<String, Void, Void> {
 
     // This method is called after onExecute
     protected Void doInBackground(String... urls) {
-        BufferedReader reader = null;
         // Data is send
         try {
             // Current data is retrieved
@@ -48,7 +47,7 @@ public class WeatherAPIConnection extends AsyncTask<String, Void, Void> {
             mediator.sendBroadcast(Mediator.WEATHER_INFO, extras);
 
 
-            // Retrieved info is sent to the PresenterPanoramaPreview
+            // Retrieved info is sent to the PresenterImagePreview
 
         } catch (Exception ex) {
             mediator.sendBroadcast(Mediator.WEATHER_INFO, null);
@@ -67,7 +66,7 @@ public class WeatherAPIConnection extends AsyncTask<String, Void, Void> {
             // Answer is retrieved
             reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line + " ");
             }

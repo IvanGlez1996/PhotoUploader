@@ -1,30 +1,28 @@
 package com.example.panorama.presenter;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.example.panorama.Mediator;
+import com.example.panorama.model.IModelUploadImage;
+import com.example.panorama.model.ModelUploadImage;
 import com.example.panorama.model.database.CustomTag;
-import com.example.panorama.model.IModelPanoramaPreview;
-import com.example.panorama.model.ModelPanoramaPreview;
 import com.example.panorama.model.database.PanoramicImage;
-import com.example.panorama.view.ActivityPanoramaPreview;
+import com.example.panorama.view.ActivityUploadImage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class PresenterUploadImage implements IPresenterUploadImage {
 
     private Mediator mediator;
-    private ActivityPanoramaPreview panoramaPreviewActivity;
-    private IModelPanoramaPreview model;
+    private ActivityUploadImage activityUploadImage;
+    private IModelUploadImage model;
 
-
-    @Override
-    public void saveImageIntoDatabase(ArrayList<String> data){
-        model.saveImageIntoDatabase(data);
+    public PresenterUploadImage() {
+        mediator = Mediator.getInstance();
+        activityUploadImage = (ActivityUploadImage) mediator.getActivityUploadImage();
+        model = ModelUploadImage.getInstance();
     }
 
     @Override
@@ -48,22 +46,27 @@ public class PresenterUploadImage implements IPresenterUploadImage {
     }
 
     @Override
-    public List<PanoramicImage> getImages() {
-        return model.getImages();
+    public void loadPhotoSphere(String filename) {
+        Bitmap myBitmap = model.getPhotoSphere(filename);
+        if (model.getImageFileExists()) {
+            activityUploadImage.showImage(myBitmap);
+        } else {
+            Log.d("Error", "The image doesn't exist");
+        }
     }
 
     @Override
-    public void deleteImageFromDatabase(String path) {
-        model.deleteImageFromDatabase(path);
+    public void showCustomTags(String imagePath){
+        List<CustomTag> data = getImageTagsFromDatabase(imagePath);
+        activityUploadImage.setAdapter(data);
     }
 
-
-    public PresenterUploadImage() {
-        mediator = Mediator.getInstance();
-        panoramaPreviewActivity = (ActivityPanoramaPreview) mediator.getActivityPanoramaPreview();
-        model = ModelPanoramaPreview.getInstance();
+    @Override
+     public void addNewTag(String tagText, String imagePath){
+        CustomTag customTag = new CustomTag(tagText, imagePath);
+        saveTagIntoDatabase(customTag.getCustomTagId(), imagePath, tagText);
+        activityUploadImage.notifyAdapterDataSetChanged();
     }
-
 
 
 }

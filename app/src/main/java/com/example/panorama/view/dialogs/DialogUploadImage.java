@@ -68,7 +68,7 @@ public class DialogUploadImage extends Dialog implements
         ilumination = findViewById(R.id.ilumination);
         mRecyclerView = findViewById(R.id.lista);
 
-        image = Mediator.getInstance().getActivityUploadImage().getImage();
+        image = mediator.getPresenterUploadImage().getImage(mediator.getActivityUploadImage().getImagePath());
 
         setTextViews();
 

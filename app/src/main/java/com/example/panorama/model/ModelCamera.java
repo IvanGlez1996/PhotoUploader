@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ModelPanoramaPreview implements IModelPanoramaPreview {
+public class ModelCamera implements IModelCamera {
 
-    private static ModelPanoramaPreview singleton = null;
+    private static ModelCamera singleton = null;
     private Mediator appMediador;
     private DatabaseFacade database;
 
-    private ModelPanoramaPreview() {
+    private ModelCamera() {
         appMediador = Mediator.getInstance();
         database = DatabaseFacade.getInstance();
     }
 
-    public static ModelPanoramaPreview getInstance() {
+    public static ModelCamera getInstance() {
         if (singleton == null)
-            singleton = new ModelPanoramaPreview();
+            singleton = new ModelCamera();
         return singleton;
     }
 

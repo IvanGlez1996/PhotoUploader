@@ -2,13 +2,11 @@ package com.example.panorama.view;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -16,13 +14,12 @@ import android.widget.ImageView;
 import com.example.panorama.Mediator;
 import com.example.panorama.R;
 import com.example.panorama.model.database.CustomTag;
-import com.example.panorama.model.database.PanoramicImage;
-import com.example.panorama.view.adapters.Adapter;
+import com.example.panorama.presenter.IPresenterUploadImage;
+import com.example.panorama.view.adapters.AdapterTags;
 import com.example.panorama.view.dialogs.DialogAddTag;
 import com.example.panorama.view.dialogs.DialogUploadImage;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
-import java.io.File;
 import java.util.List;
 
 
@@ -35,13 +32,14 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<CustomTag> datos;
     private FloatingActionButton addTagBtn;
     private VrPanoramaView mVrPanoramaView;
     private Toolbar toolbar;
     private Mediator mediator;
     private ImageView uploadBtn;
     private String imagePath;
+
+    private IPresenterUploadImage presenter;
 
 
     @Override
@@ -51,6 +49,8 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
 
         mediator = Mediator.getInstance();
         mediator.setActivityUploadImage(this);
+
+        presenter = mediator.getPresenterUploadImage();
 
         Intent i = getIntent();
         imagePath = i.getStringExtra("imagePath");
@@ -80,8 +80,6 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
 
         mVrPanoramaView = findViewById(R.id.pano_view);
 
-        datos = getImageTagsFromDatabase(imagePath);
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -90,50 +88,32 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new Adapter(datos);
-        mRecyclerView.setAdapter(mAdapter);
+        presenter.loadPhotoSphere(imagePath);
 
-        loadPhotoSphere();
+        showCustomTags(imagePath);
+
     }
 
-    public List<CustomTag> getImageTagsFromDatabase(String imagePath) {
-        return mediator.getPresenterUploadImage().getImageTagsFromDatabase(imagePath);
-    }
-
+    @Override
     public void showAddTagAlert() {
         DialogAddTag cdd = new DialogAddTag(ActivityUploadImage.this);
         cdd.show();
     }
 
+    @Override
     public void showUploadDialog(){
         DialogUploadImage dialog = new DialogUploadImage(ActivityUploadImage.this);
         dialog.show();
     }
 
-    public void addNewTag(String tag) {
-        CustomTag customTag = new CustomTag(tag, imagePath);
-        mediator.getPresenterUploadImage().saveTagIntoDatabase(customTag.getCustomTagId(), imagePath, tag);
-        mAdapter.notifyDataSetChanged();
-
+    @Override
+    public void addNewTag(String tagText) {
+        presenter.addNewTag(tagText, imagePath);
     }
 
-    private void loadPhotoSphere() {
-        //This could take a while. Should do on a background thread, but fine for current example
-        VrPanoramaView.Options options = new VrPanoramaView.Options();
-
-        File imgFile = new File(imagePath);
-
-        if (imgFile.exists()) {
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-
-            options.inputType = VrPanoramaView.Options.TYPE_MONO;
-            mVrPanoramaView.loadImageFromBitmap(myBitmap, options);
-        } else {
-            Log.d("Error", "La imagen no existe");
-        }
+    @Override
+    public void notifyAdapterDataSetChanged(){
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -156,8 +136,27 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
         super.onDestroy();
     }
 
-    public PanoramicImage getImage(){
-        return mediator.getPresenterUploadImage().getImage(imagePath);
+    @Override
+    public String getImagePath(){
+        return imagePath;
+    }
+
+    @Override
+    public void setAdapter(List<CustomTag> tags){
+        mAdapter = new AdapterTags(tags);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void showCustomTags(String imagePath){
+        presenter.showCustomTags(imagePath);
+    }
+
+    @Override
+    public void showImage(Bitmap myBitmap){
+        VrPanoramaView.Options options = new VrPanoramaView.Options();
+        options.inputType = VrPanoramaView.Options.TYPE_MONO;
+        mVrPanoramaView.loadImageFromBitmap(myBitmap, options);
     }
 
 

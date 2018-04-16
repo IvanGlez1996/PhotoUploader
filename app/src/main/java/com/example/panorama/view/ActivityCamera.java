@@ -1,7 +1,6 @@
 package com.example.panorama.view;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,7 +20,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.example.panorama.Mediator;
 import com.example.panorama.NativePanorama;
@@ -34,13 +32,11 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class ActivityMain extends AppCompatActivity implements IActivityMain {
+public class ActivityCamera extends AppCompatActivity implements IActivityCamera {
     static{
         System.loadLibrary("opencv_java3");
         System.loadLibrary("MyLib");
@@ -51,7 +47,6 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
     private Camera mCam;
     private boolean isPreview; // Is the camera frame displaying?
     private boolean safeToTakePicture = true; // Is it safe to capture a picture?
-    private LinearLayout linearLayout; // used to place the two buttons
     private Mediator mediator;
     private GPSTracker gps;
     private int count;
@@ -62,10 +57,10 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_camera);
 
         mediator = (Mediator) this.getApplication();
-        mediator.setMainView(this);
+        mediator.setActivityCamera(this);
 
         isPreview = false;
         mSurfaceView = (SurfaceView)findViewById(R.id.surfaceView);
@@ -81,7 +76,7 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
         saveBtn = (Button) findViewById(R.id.save);
         saveBtn.setOnClickListener(saveOnClickListener);
 
-        gps = new GPSTracker(ActivityMain.this);
+        gps = new GPSTracker(ActivityCamera.this);
 
         count = 0;
 
@@ -103,11 +98,6 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
                 mCam.takePicture(null, null, jpegCallback);
                 count++;
                 if(count >=  2){
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     saveBtn.setVisibility(View.VISIBLE);
                 }
             }
@@ -196,8 +186,8 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
                     @Override
                     public void run() {
                         Bundle extras = new Bundle();
-                        extras.putString("fileName", fileName);
-                        mediator.launchActivity(ActivityPanoramaPreview.class, ActivityMain.this, extras);
+                        extras.putString("imagePath", fileName);
+                        mediator.launchActivity(ActivityImagePreview.class, ActivityCamera.this, extras);
                     }
                 });
 
@@ -210,17 +200,20 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
         }
     };
 
-    private void showProcessingDialog(){
+    @Override
+    public void showProcessingDialog(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mCam.stopPreview();
-                ringProgressDialog = ProgressDialog.show(ActivityMain.this, "",	"Panorama", true);
+                ringProgressDialog = ProgressDialog.show(ActivityCamera.this, "",	"Panorama", true);
                 ringProgressDialog.setCancelable(false);
             }
         });
     }
-    private void closeProcessingDialog(){
+
+    @Override
+    public void closeProcessingDialog(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -268,7 +261,8 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
         }
     };
 
-    private Camera.Size getBestPreviewSize(Camera.Parameters parameters){
+    @Override
+    public Camera.Size getBestPreviewSize(Camera.Parameters parameters){
         Camera.Size bestSize = null;
         List<Camera.Size> sizeList = parameters.getSupportedPreviewSizes();
         bestSize = sizeList.get(0);
@@ -279,26 +273,6 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
             }
         }
         return bestSize;
-    }
-
-    private void saveBitmap(Bitmap bmp){
-        String filename = "/sdcard/testPano.bmp";
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filename);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -341,7 +315,7 @@ public class ActivityMain extends AppCompatActivity implements IActivityMain {
     }
 
     public void showSettingsAlert(){
-        DialogGPSSettings cdd = new DialogGPSSettings(ActivityMain.this);
+        DialogGPSSettings cdd = new DialogGPSSettings(ActivityCamera.this);
         cdd.show();
     }
 }

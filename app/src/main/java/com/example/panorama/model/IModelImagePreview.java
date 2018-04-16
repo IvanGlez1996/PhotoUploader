@@ -1,8 +1,6 @@
-package com.example.panorama.presenter;
+package com.example.panorama.model;
 
 import android.graphics.Bitmap;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
 
 import com.example.panorama.model.database.CustomTag;
 import com.example.panorama.model.database.PanoramicImage;
@@ -10,14 +8,19 @@ import com.example.panorama.model.database.PanoramicImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IPresenterPanoramaPreview {
+/**
+ * Created by IvanGlez on 13/03/2018.
+ */
+
+public interface IModelImagePreview {
 
     void saveImageIntoDatabase(ArrayList<String> data);
 
-    void getWeatherInfo();
+    Bitmap getPhotoSphere(String filename);
 
-    void loadPhotoSphere(String filename);
+    boolean getImageFileExists();
 
+    void setImageFileExists(boolean imgFileExists);
 
     void registerSensorListener();
 
@@ -28,5 +31,10 @@ public interface IPresenterPanoramaPreview {
     void setWeatherTags(ArrayList<String> data);
 
     void saveImage();
-}
 
+    void initSensorsService();
+
+    void initGPSService();
+
+    boolean canGetLocation();
+}
