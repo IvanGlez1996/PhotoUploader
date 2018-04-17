@@ -119,6 +119,23 @@ public class Mediator extends Application {
         return presenterImageList;
     }
 
+    public void removePresenterCamera() {
+        presenterCamera = null;
+    }
+
+    public void removePresenterUploadImage() {
+        presenterUploadImage = null;
+    }
+
+    public void removePresenterImagePreview() {
+        presenterImagePreview = null;
+    }
+
+    public void removePresenterImageList() {
+        presenterImageList = null;
+    }
+
+
     //////////////////////////////////// METHODS TO NAVIGATE BETWEEN ACTIVITIES /////////////////////////////////////////////////
 
     public void launchActivity(Class actividadInvocada, Object invocador, Bundle extras) {

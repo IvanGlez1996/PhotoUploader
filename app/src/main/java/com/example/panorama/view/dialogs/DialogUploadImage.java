@@ -49,8 +49,8 @@ public class DialogUploadImage extends Dialog implements
 
         mediator = Mediator.getInstance();
 
-        upload = (Button) findViewById(R.id.upload_btn);
-        cancel = (Button) findViewById(R.id.cancel_btn);
+        upload = findViewById(R.id.upload_btn);
+        cancel = findViewById(R.id.cancel_btn);
         upload.setOnClickListener(this);
         cancel.setOnClickListener(this);
 

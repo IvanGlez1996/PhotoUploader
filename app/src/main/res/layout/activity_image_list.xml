@@ -52,6 +52,17 @@
         android:orientation="vertical"
         >
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add images using the camera button"
+            android:textColor="@color/colorTextPrimary"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:id="@+id/infoText"
+            />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lista"
             android:layout_width="match_parent"

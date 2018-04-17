@@ -36,6 +36,11 @@ public class PresenterImageList implements IPresenterImageList {
     @Override
     public void showImages() {
         List<PanoramicImage> data = getImages();
+        if(data.size() == 0){
+            imageListActivity.setInfoTextVisible(true);
+        } else {
+            imageListActivity.setInfoTextVisible(false);
+        }
         for(int i = 0; i < data.size(); i++) {
             String path = data.get(i).getPath();
             File file = new File(path);

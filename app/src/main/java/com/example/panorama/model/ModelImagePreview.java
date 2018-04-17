@@ -186,7 +186,9 @@ public class ModelImagePreview implements IModelImagePreview, SensorEventListene
     @Override
     public void initGPSService(){
         // create class object
-        gps = new GPSTracker(mediator.getApplicationContext());
+        if(gps == null) {
+            gps = new GPSTracker(mediator.getApplicationContext());
+        }
     }
 
     @Override

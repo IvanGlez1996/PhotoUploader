@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.panorama.Mediator;
 import com.example.panorama.R;
@@ -27,6 +28,7 @@ public class ActivityImageList extends AppCompatActivity implements IActivityIma
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton cameraBtn;
     private Toolbar toolbar;
+    private TextView infoText;
     private Mediator mediator;
 
 
@@ -39,6 +41,8 @@ public class ActivityImageList extends AppCompatActivity implements IActivityIma
         mediator.setImageListActivity(this);
 
         mRecyclerView = findViewById(R.id.lista);
+
+        infoText = findViewById(R.id.infoText);
 
         cameraBtn = findViewById(R.id.floatingCameraBtn);
         cameraBtn.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +100,7 @@ public class ActivityImageList extends AppCompatActivity implements IActivityIma
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mediator.removePresenterImageList();
     }
 
     @Override
@@ -107,6 +112,15 @@ public class ActivityImageList extends AppCompatActivity implements IActivityIma
     public void setAdapter(List<PanoramicImage> images){
         mAdapter = new AdapterImages(images);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void setInfoTextVisible(boolean visible){
+        if(visible == true){
+            infoText.setVisibility(View.VISIBLE);
+        } else {
+            infoText.setVisibility(View.GONE);
+        }
     }
 
 

@@ -58,6 +58,11 @@ public class PresenterUploadImage implements IPresenterUploadImage {
     @Override
     public void showCustomTags(String imagePath){
         List<CustomTag> data = getImageTagsFromDatabase(imagePath);
+        if(data.size() == 0){
+            activityUploadImage.setInfoTextVisible(true);
+        } else {
+            activityUploadImage.setInfoTextVisible(false);
+        }
         activityUploadImage.setAdapter(data);
     }
 
@@ -65,6 +70,7 @@ public class PresenterUploadImage implements IPresenterUploadImage {
      public void addNewTag(String tagText, String imagePath){
         CustomTag customTag = new CustomTag(tagText, imagePath);
         saveTagIntoDatabase(customTag.getCustomTagId(), imagePath, tagText);
+        activityUploadImage.setInfoTextVisible(false);
         activityUploadImage.notifyAdapterDataSetChanged();
     }
 

@@ -27,4 +27,6 @@ public interface IActivityUploadImage {
     void showCustomTags(String imagePath);
 
     void showImage(Bitmap myBitmap);
+
+    void setInfoTextVisible(boolean visible);
 }

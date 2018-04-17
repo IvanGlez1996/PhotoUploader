@@ -7,9 +7,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.panorama.Mediator;
 import com.example.panorama.R;
@@ -37,6 +39,7 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
     private Toolbar toolbar;
     private Mediator mediator;
     private ImageView uploadBtn;
+    private TextView infoText;
     private String imagePath;
 
     private IPresenterUploadImage presenter;
@@ -51,6 +54,8 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
         mediator.setActivityUploadImage(this);
 
         presenter = mediator.getPresenterUploadImage();
+
+        infoText = findViewById(R.id.infoText);
 
         Intent i = getIntent();
         imagePath = i.getStringExtra("imagePath");
@@ -132,8 +137,9 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
 
     @Override
     protected void onDestroy() {
-        mVrPanoramaView.shutdown();
         super.onDestroy();
+        mVrPanoramaView.shutdown();
+        mediator.removePresenterUploadImage();
     }
 
     @Override
@@ -159,6 +165,14 @@ public class ActivityUploadImage extends AppCompatActivity implements IActivityU
         mVrPanoramaView.loadImageFromBitmap(myBitmap, options);
     }
 
+    @Override
+    public void setInfoTextVisible(boolean visible){
+        if(visible == true){
+            infoText.setVisibility(View.VISIBLE);
+        } else {
+            infoText.setVisibility(View.GONE);
+        }
+    }
 
 }
 

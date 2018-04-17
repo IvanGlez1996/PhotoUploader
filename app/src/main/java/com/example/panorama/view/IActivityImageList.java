@@ -12,4 +12,5 @@ public interface IActivityImageList {
 
     void showImages();
 
+    void setInfoTextVisible(boolean visible);
 }

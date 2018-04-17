@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,9 @@ public class AdapterImages extends RecyclerView.Adapter<AdapterImages.ViewHolder
             //Log.d("View: ", v.toString());
             //Toast.makeText(v.getContext(), mTextViewTitle.getText() + " position = " + getPosition(), Toast.LENGTH_SHORT).show();
             if (v.equals(cardView)) {
-                mediator.getActivityImageList().goToTagsActivity(mDataset.get(getAdapterPosition()).getPath());
+                String imagePath = mDataset.get(getAdapterPosition()).getPath();
+                Log.d("ImagePath: ", imagePath);
+                mediator.getActivityImageList().goToTagsActivity(imagePath);
             }
         }
 
