@@ -203,6 +203,7 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-vision-12.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-api-phone-12.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-nearby-license-12.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.gotev:uploadservice-3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-12.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-fitness-12.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-config-12.0.0" level="project" />

@@ -22,6 +22,8 @@ import com.example.panorama.view.IActivityCamera;
 import com.example.panorama.view.IActivityImagePreview;
 import com.example.panorama.view.IActivityUploadImage;
 
+import net.gotev.uploadservice.UploadService;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -178,6 +180,8 @@ public class Mediator extends Application {
                 .modules(new ModuleCustomTagsPanoramicImage())
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+
+        UploadService.NAMESPACE = "com.example.panorama";
 
         //DatabaseFacade.getInstance().deleteDatabase();
     }

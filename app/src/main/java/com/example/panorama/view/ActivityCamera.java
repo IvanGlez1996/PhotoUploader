@@ -188,6 +188,7 @@ public class ActivityCamera extends AppCompatActivity implements IActivityCamera
                         Bundle extras = new Bundle();
                         extras.putString("imagePath", fileName);
                         mediator.launchActivity(ActivityImagePreview.class, ActivityCamera.this, extras);
+                        finish();
                     }
                 });
 

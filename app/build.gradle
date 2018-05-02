@@ -72,4 +72,5 @@ dependencies {
     implementation 'com.google.vr:sdk-commonwidget:1.130.0'
     implementation 'com.google.android.gms:play-services:12.0.0'
     implementation 'com.google.android.gms:play-services-location:12.0.0'
+    implementation 'net.gotev:uploadservice:3.4.2'
 }

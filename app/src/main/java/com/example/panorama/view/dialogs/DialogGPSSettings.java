@@ -36,8 +36,8 @@ public class DialogGPSSettings extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_gps_settings);
         title = findViewById(R.id.title);
-        settings = (Button) findViewById(R.id.settings_btn);
-        cancel = (Button) findViewById(R.id.cancel_btn);
+        settings = findViewById(R.id.settings_btn);
+        cancel = findViewById(R.id.cancel_btn);
         settings.setOnClickListener(this);
         cancel.setOnClickListener(this);
 

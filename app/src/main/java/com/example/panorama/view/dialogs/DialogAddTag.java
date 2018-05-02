@@ -37,9 +37,9 @@ public class DialogAddTag extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_add_tag);
         title = findViewById(R.id.title);
-        editText = (EditText) findViewById(R.id.tagInput);
-        add = (Button) findViewById(R.id.add_btn);
-        cancel = (Button) findViewById(R.id.cancel_btn);
+        editText = findViewById(R.id.tagInput);
+        add = findViewById(R.id.add_btn);
+        cancel = findViewById(R.id.cancel_btn);
         add.setOnClickListener(this);
         cancel.setOnClickListener(this);
 
