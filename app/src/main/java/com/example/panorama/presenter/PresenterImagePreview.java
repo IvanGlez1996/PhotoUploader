@@ -87,6 +87,7 @@ public class PresenterImagePreview implements IPresenterImagePreview {
         extras.putString("imagePath", panoramaPreviewActivity.getImagePath());
         mediator.launchActivity(ActivityUploadImage.class, panoramaPreviewActivity, extras);
         panoramaPreviewActivity.finishActivity();
+        mediator.removePresenterImagePreview();
     }
 
     @Override

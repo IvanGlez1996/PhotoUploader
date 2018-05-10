@@ -2,6 +2,7 @@ package com.example.panorama.model.low_level;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.panorama.Mediator;
 
@@ -109,6 +110,10 @@ public class WeatherAPIConnection extends AsyncTask<String, Void, Void> {
         list.add(condition);
         list.add(windSpeed);
         list.add(windDir);
+
+        for(int i = 0; i<list.size(); i++){
+            Log.d("tags weather: ", list.get(i));
+        }
         return list;
     }
 }

@@ -23,7 +23,6 @@ public class DatabaseFacade {
 
     private DatabaseFacade() {
         realmDatabase = Realm.getDefaultInstance();
-
     }
 
     public void deleteDatabase(){

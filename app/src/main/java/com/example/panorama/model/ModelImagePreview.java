@@ -164,10 +164,17 @@ public class ModelImagePreview implements IModelImagePreview, SensorEventListene
     @Override
     public void saveImage(){
         while (true){
+            Log.d("tags size: ", String.valueOf(tags.size()));
+            for(int i = 0; i<tags.size(); i++) {
+                Log.d("Hola: ", "Hola");
+                Log.d("tags: ", tags.get(i));
+            }
             if (tags.size() == 12) {
                 saveImageIntoDatabase(tags);
                 gps.stopUsingGPS();
+                gps = null;
                 unregisterSensorListener();
+                tags.clear();
                 break;
             }
         }

@@ -181,7 +181,7 @@ public class DialogUploadImage extends Dialog implements
                             // if you have mapped your server response to a POJO, you can easily get it:
                             // YourClass obj = new Gson().fromJson(serverResponse.getBodyAsString(), YourClass.class);
                             Log.d("Server response: ", serverResponse.getBodyAsString());
-                            if(!serverResponse.getBodyAsString().equals("imageExists")) {
+                            if(!serverResponse.getBodyAsString().equals(" imageExists")) {
                                 closeProcessingDialog();
                                 Toast.makeText(c.getApplicationContext(), "Image successfully uploaded!", Toast.LENGTH_SHORT).show();
                                 c.finish();
